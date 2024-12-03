@@ -1,20 +1,25 @@
-configfile: "../config/config.yaml"
+configfile: "./config/config.yaml"
+
+# Rules to include
+include: "./rules/fastqc.smk"
+include: "./rules/merge.smk"
+
+
+# Define the directory containing the FASTQ files
+sample_dir = config["sample_dir"]
+
+# Define the output directory
+output_dir = config["output_dir"]
+
+# Define patterns to match specific files
+samples = glob_wildcards(f"{sample_dir}/{{sample}}.fastq.gz").sample
+
 
 rule all:
     input:
-        expand("{output_dir}/peaks/{sample}_peaks.narrowPeak", 
-               sample=config["samples"].keys(), 
-               output_dir=config["output_dir"])
-
-rule fastqc:
-    input:
-        fq="data/{sample}.fastq.gz"
-    output:
-        report="results/qc/{sample}_fastqc.html"
-    log:
-        "logs/fastqc/{sample}.log"
-    shell:
-        "fastqc {input.fq} -o results/qc > {log} 2>&1"
+        expand("{output_dir}/qc/{sample}_fastqc.html", 
+               sample=samples, 
+               output_dir=output_dir)
 
 rule trim_adapters:
     input:
