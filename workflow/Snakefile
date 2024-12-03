@@ -1,0 +1,38 @@
+configfile: "../config/config.yaml"
+
+rule all:
+    input:
+        expand("{output_dir}/peaks/{sample}_peaks.narrowPeak", 
+               sample=config["samples"].keys(), 
+               output_dir=config["output_dir"])
+
+rule fastqc:
+    input:
+        fq="data/{sample}.fastq.gz"
+    output:
+        report="results/qc/{sample}_fastqc.html"
+    log:
+        "logs/fastqc/{sample}.log"
+    shell:
+        "fastqc {input.fq} -o results/qc > {log} 2>&1"
+
+rule trim_adapters:
+    input:
+        fq="data/{sample}.fastq.gz"
+    output:
+        trimmed="results/trimmed/{sample}_trimmed.fastq.gz"
+    log:
+        "logs/trim/{sample}.log"
+    shell:
+        "cutadapt -a AGATCGGAAGAG -o {output.trimmed} {input.fq} > {log} 2>&1"
+
+rule align:
+    input:
+        fq="results/trimmed/{sample}_trimmed.fastq.gz",
+        genome=config["genome"]
+    output:
+        bam="results/aligned/{sample}.bam"
+    log:
+        "logs/align/{sample}.log"
+    shell:
+        "bowtie2 -x {input.genome} -U {input.fq} | samtools view -b > {output.bam} 2> {log}"

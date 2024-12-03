@@ -1,0 +1,15 @@
+# Settings for VSCode
+.vscode
+
+# Directory of snakemake utils
+.snakemake/
+
+# Temporary files in the results folder
+/results
+
+# R Stuff
+.Rhistory
+.RData
+
+# PDF
+*.pdf

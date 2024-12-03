@@ -1,0 +1,18 @@
+# Cut and Run configuration file
+# Arguments
+
+
+# Working directory
+workDir: "/slgpfs/projects/rcli/rcli186814/cut_run_vamador"
+
+# Analysis name
+analysisName: "TEST"
+
+samples:
+  sample1: "data/sample1_R1.fastq.gz"
+  sample2: "data/sample2_R1.fastq.gz"
+
+genome: "data/genome.fa"
+peak_caller: "MACS2"
+output_dir: "results/"
+threads: 20
