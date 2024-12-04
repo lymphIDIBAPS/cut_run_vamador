@@ -3,6 +3,8 @@ configfile: "./config/config.yaml"
 # Define the directory containing the FASTQ files
 sample_dir = config["sample_dir"]
 
+samples = glob_wildcards(f"{sample_dir}/{{sample}}_1_1.fastq.gz").sample
+
 ## merge_technical_replicates: merge data from L1_F and L2_F
 
 if config["technical_duplicates"] == "yes":

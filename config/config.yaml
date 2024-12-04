@@ -8,11 +8,11 @@ work_dir: "/slgpfs/projects/rcli/rcli186814/cut_run_vamador"
 # Analysis name
 analysis_name: "TEST"
 
+# Analysis name
+extension: "_mergedF"
+
 # Samples directory
 sample_dir: "/home/oscar/Documentos/RNA-Seq_Sample_Files/rna_paired/unmerged"
-
-genome: "data/genome.fa"
-peak_caller: "MACS2"
 
 # Output directory
 output_dir: "results"
@@ -20,5 +20,5 @@ output_dir: "results"
 # Configure if there are technical duplicates
 technical_duplicates: "yes"
 
-
+genome: "any"
 threads: 20

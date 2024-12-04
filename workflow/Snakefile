@@ -12,12 +12,12 @@ sample_dir = config["sample_dir"]
 output_dir = config["output_dir"]
 
 # Define patterns to match specific files
-samples = glob_wildcards(f"{sample_dir}/{{sample}}.fastq.gz").sample
+samples = glob_wildcards(f"{sample_dir}/{{sample}}_1_1.fastq.gz").sample
 
 
 rule all:
     input:
-        expand("{output_dir}/qc/{sample}_fastqc.html", 
+        expand("{output_dir}/fastqc/{sample}_F_fastqc.html", 
                sample=samples, 
                output_dir=output_dir)
 
