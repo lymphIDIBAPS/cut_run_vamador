@@ -15,8 +15,11 @@ samples = glob_wildcards(f"{sample_dir}/{{sample}}{extension}.fastq.gz").sample
 rule fastqc_not_merged:
     input:
         fq1_1=f"{sample_dir}/{{sample}}_1_1.fastq.gz",
+        fq1_2=f"{sample_dir}/{{sample}}_1_2.fastq.gz",
+        fq2_1=f"{sample_dir}/{{sample}}_2_1.fastq.gz",
+        fq2_2=f"{sample_dir}/{{sample}}_2_2.fastq.gz",
     output:
-        reportF=f"{output_dir}/fastqc/{{sample}}_fastqc.html"
+        report1_1=f"{output_dir}/fastqc/{{sample}}_1_1_fastqc.html"
     conda:
         "../envs/fastqc.yaml"
     log:
@@ -31,7 +34,7 @@ rule fastqc_not_merged:
     shell:
         """
         mkdir -p {params.output_dir}/fastqc {params.log_dir}
-        fastqc {input.fq1_1} -o {params.output_dir}/fastqc > {log.log} 2>&1
+        fastqc {input} -o {params.output_dir}/fastqc > {log.log} 2>&1
         """
 
 
@@ -40,13 +43,13 @@ rule fastqc_merged:
         fqF=f"{sample_dir}/{{sample}}_mergedF.fastq.gz",
         fqR=f"{sample_dir}/{{sample}}_mergedR.fastq.gz"
     output:
-        reportF=f"{output_dir}/fastqc/{{sample}}_F_fastqc.html",
-        reportR=f"{output_dir}/fastqc/{{sample}}_R_fastqc.html"
+        reportF=f"{output_dir}/fastqc/{{sample}}_mergedF_fastqc.html",
+        reportR=f"{output_dir}/fastqc/{{sample}}_mergedR_fastqc.html"
     conda:
         "../envs/fastqc.yaml"
     log:
-        log_F = "logs/fastqc/{sample}_F.log",
-        log_R = "logs/fastqc/{sample}_R.log"
+        logF = "logs/fastqc/{sample}_F.log",
+        logR = "logs/fastqc/{sample}_R.log",
     envmodules:
         "/apps/modules/modulefiles/tools/java/12.0.2"
         "/apps/modules/modulefiles/tools/fastqc/0.11.9"
@@ -57,6 +60,6 @@ rule fastqc_merged:
     shell:
         """
         mkdir -p {params.output_dir}/fastqc {params.log_dir}
-        fastqc {input.fqF} -o {params.output_dir}/fastqc > {log.log_F} 2>&1
-        fastqc {input.fqR} -o {params.output_dir}/fastqc > {log.log_R} 2>&1
+        fastqc {input.fqF} -o {params.output_dir}/fastqc > {log.logF} 2>&1
+        fastqc {input.fqR} -o {params.output_dir}/fastqc > {log.logR} 2>&1
         """

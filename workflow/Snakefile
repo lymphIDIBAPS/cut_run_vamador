@@ -18,11 +18,11 @@ samples = glob_wildcards(f"{sample_dir}/{{sample}}_1_1.fastq.gz").sample
 rule all:
     input:
         # This line calls for the fastqc of the merged samples 
-        expand("{output_dir}/fastqc/{sample}_F_fastqc.html", 
+        expand("{output_dir}/fastqc/{sample}_mergedF_fastqc.html", 
                sample=samples, 
                output_dir=output_dir),
         # This line calls for the fastqc of the unmerged samples
-        expand("{output_dir}/fastqc/{sample}_fastqc.html", 
+        expand("{output_dir}/fastqc/{sample}_1_1_fastqc.html", 
                sample=samples, 
                output_dir=output_dir)
 

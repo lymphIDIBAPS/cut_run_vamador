@@ -5,7 +5,10 @@
 .snakemake/
 
 # Temporary files in the results folder
-/results
+results/
+
+# Files in the logs folder
+logs/
 
 # R Stuff
 .Rhistory
