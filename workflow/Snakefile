@@ -35,14 +35,3 @@ rule trim_adapters:
         "logs/trim/{sample}.log"
     shell:
         "cutadapt -a AGATCGGAAGAG -o {output.trimmed} {input.fq} > {log} 2>&1"
-
-rule align:
-    input:
-        fq="results/trimmed/{sample}_trimmed.fastq.gz",
-        genome=config["genome"]
-    output:
-        bam="results/aligned/{sample}.bam"
-    log:
-        "logs/align/{sample}.log"
-    shell:
-        "bowtie2 -x {input.genome} -U {input.fq} | samtools view -b > {output.bam} 2> {log}"
