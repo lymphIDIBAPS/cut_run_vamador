@@ -17,6 +17,10 @@ sample_dir: "/home/oscar/Documentos/RNA-Seq_Sample_Files/rna_paired/unmerged"
 # Output directory
 output_dir: "results"
 
+# Location of genome data for bwa index
+# Caution! You need acess to the cli79 folder (F. Nadeu folder in BSC)
+path_to_genome: "/slgpfs/projects/cli79/reference_data_and_pipelines/data/genome_GRCh37.p13_GCA_000001405.14/BWA_and_PICARD"
+
 # Configure if there are technical duplicates
 technical_duplicates: "yes"
 

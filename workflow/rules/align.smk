@@ -7,8 +7,12 @@ sample_dir = config['sample_dir']
 # Define the directory to store the results in
 output_dir = config['output_dir']
 
+# Define the directory to grab the genome information from
+genome_dir = config['path_to_genome']
+
 rule bwa_index:
-    input: "a",
+    input: 
+        genome = f"{genome_dir}/Homo_sapiens.GRCh37.dna.primary_assembly.fa"
     output: "a",
     conda:
         "../envs/bwa.yaml"
