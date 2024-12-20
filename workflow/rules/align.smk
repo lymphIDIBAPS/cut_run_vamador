@@ -13,27 +13,39 @@ genome_dir = config['path_to_genome']
 rule bwa_index:
     input: 
         genome = f"{genome_dir}/Homo_sapiens.GRCh37.dna.primary_assembly.fa"
-    output: "a",
+    output:
+        genome_amb = f"{genome_dir}/Homo_sapiens.GRCh37.dna.primary_assembly.fa.amb",
+        genome_ann = f"{genome_dir}/Homo_sapiens.GRCh37.dna.primary_assembly.fa.ann",
+        genome_bwt = f"{genome_dir}/Homo_sapiens.GRCh37.dna.primary_assembly.fa.bwt",
+        genome_pac = f"{genome_dir}/Homo_sapiens.GRCh37.dna.primary_assembly.fa.pac",
+        genome_sa = f"{genome_dir}/Homo_sapiens.GRCh37.dna.primary_assembly.fa.sa"
     conda:
         "../envs/bwa.yaml"
     envmodules:
         "/apps/modules/modulefiles/tools/bwa/0.7.17"
     shell:
         """
-        echo "Index Made"
+        bwa index {input.genome}
         """
 
-rule align:
+rule bwa_mem:
     input:
-        fq="results/trimmed/{sample}_trimmed.fastq.gz",
-        genome=config["genome"]
+        fq = "results/trimmed/{sample}_trimmed.fastq.gz",
+        genome_amb = f"{genome_dir}/Homo_sapiens.GRCh37.dna.primary_assembly.fa.amb"
     output:
-        bam="results/aligned/{sample}.bam"
+        bam = "results/mapped/{sample}.bam"
     conda:
         "../envs/bwa.yaml"
     log:
-        "logs/align/{sample}.log"
+        "logs/bwa_mem/{sample}.log"
     envmodules:
         "/apps/modules/modulefiles/tools/bwa/0.7.17"
+    params:
+        extra = r"-R '@RG\tID:{sample}\tSM:{sample}'",
+        sorting = "none",  # Can be 'none', 'samtools' or 'picard'.
+        sort_order = "queryname",  # Can be 'queryname' or 'coordinate'.
+        sort_extra = ""  # Extra args for samtools/pic
     shell:
-        "bowtie2 -x {input.genome} -U {input.fq} | samtools view -b > {output.bam} 2> {log}"
+        """
+        bwa mem -t {snakemake.threads} {extra} {index} {snakemake.input.reads} | + pipe_cmd {log}
+        """
